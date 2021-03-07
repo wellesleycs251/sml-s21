@@ -1,0 +1,7 @@
+(* This file has function definitions with numerous bugs. 
+   Correct the bugs so that it typechecks without error when 
+   loaded into SML *)
+
+fun sumList [] = 0
+  | sumList (n::ns) = n + (sumList ns)
+   

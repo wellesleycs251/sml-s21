@@ -1,0 +1,5 @@
+(bindex (a b)
+  (bind sum (+ a b)
+    (bind diff (- a 2)
+      (/ (* sum sum)
+         (* diff diff)))))

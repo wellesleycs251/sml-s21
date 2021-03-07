@@ -1,0 +1,5 @@
+fun sumProdList [] = (0, 1)
+  | sumProdList (n:ns) =
+    let (sum, prod) = sumProdList ns
+    in (n+sum, n*prod)
+    end
