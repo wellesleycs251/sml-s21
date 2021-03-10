@@ -1,7 +1,6 @@
-(* This file has six function definitions with numerous 
-   syntax and type bugs. Correct the bugs so that it 
-   typechecks without error when loaded into SML 
-   and the functions work as expected *)
+(* This file has six function definitions with numerous syntax and type
+   bugs. Correct the bugs so that it typechecks without error when loaded 
+   into SML and the functions work as expected *)
 
 (* 
     val sumListRec = fn : int list -> int
@@ -11,7 +10,7 @@
     val it = 11 : int
 *)
 fun sumListRec [] = 0
-  | sumListRec (n::ns) = n + (sumListRec ns)
+  | sumListRec (n, ns) = n + (sumList ns)
    
 (* 
     val prodListRec = fn : int list -> int
@@ -21,9 +20,7 @@ fun sumListRec [] = 0
     val it = 40 : int
 *)
 fun prodListRec [] = 1
-  | prodListRec n::ns  = n * (prodList ns)
-
-(*				 
+  | prodListRec n::ns  = n * prodListRec ns
 
 (*
     val myZip = fn : 'a list * 'b list -> ('a * 'b) list
@@ -80,4 +77,4 @@ fun dotProduct xs ys =
 	  (map (fn [x,y] => x*y)
 	       ListPair.zip(xs,ys))
 
-*)
+
