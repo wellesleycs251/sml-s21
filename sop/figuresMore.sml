@@ -23,6 +23,7 @@ datatype figure =
   | Sq of real (* side *)
   | FigPair of figure * figure
   | FigGroup of figure list
+  (* Add new constructors here *)
 
 val c = Circ 1.0
 val r = Rect (2.0,3.0)
@@ -30,7 +31,13 @@ val t = Tri(4.0,5.0,6.0)
 val s = Sq(7.0)
 val p = FigPair(r, s)
 val g = FigGroup([c, t, p])
-val figs = [c, r, t, s, p, g] (* List of sample figures *)
+val figs = [c, r, t] (* List of sample figures *)		
+(* 		
+  (* change the above to: *)
+  val figs = [c, r, t, s] 
+  val figs = [c, r, t, s, p] 
+  val figs = [c, r, t, s, p, g] 
+ *) 
 
 (* 	       
   (* Lyn has manually reformatted this: *)
@@ -45,9 +52,8 @@ val figs = [c, r, t, s, p, g] (* List of sample figures *)
 fun perim (Circ r) = 2.0 * Math.pi * r
   | perim (Rect(w,h)) = 2.0 * (w + h)
   | perim (Tri(s1,s2,s3)) = s1 + s2 + s2
-  | perim (Sq(s)) = s*s
-  | perim (FigPair(f1,f2)) = perim(f1) + perim(f2)
-  | perim (FigGroup(fs)) = foldr Real.+ 0.0 (map perim fs)
+  (* Handled new constructors here *)	  
+
 
 val perims = map perim figs
 
@@ -58,9 +64,7 @@ val perims = map perim figs
 fun scale n (Circ r) = Circ (n * r) (* Scale figure by factor n *)
   | scale n (Rect(w,h)) = Rect (n*w, n*h)
   | scale n (Tri(s1,s2,s3)) = Tri (n*s1, n*s2, n*s3)
-  | scale n (Sq(s)) = Sq(n*s)
-  | scale n (FigPair(f1,f2)) = FigPair(scale n f1, scale n f2)
-  | scale n (FigGroup(fs)) = FigGroup(map (fn f => scale n f) fs)
+  (* Handled new constructors here *)				  
 
 val scaledFigs = map (scale 3.0) figs;
 
