@@ -20,24 +20,25 @@ datatype figure =
     Circ of real (* radius *)
   | Rect of real * real (* width, height *)
   | Tri of real * real * real (* side1, side2, side3 *)
-  | Sq of real (* side *)
-  | FigPair of figure * figure
-  | FigGroup of figure list
   (* Add new constructors here *)
 
 val c = Circ 1.0
 val r = Rect (2.0,3.0)
 val t = Tri(4.0,5.0,6.0)
-val s = Sq(7.0)
-val p = FigPair(r, s)
-val g = FigGroup([c, t, p])
 val figs = [c, r, t] (* List of sample figures *)		
-(* 		
-  (* change the above to: *)
-  val figs = [c, r, t, s] 
-  val figs = [c, r, t, s, p] 
-  val figs = [c, r, t, s, p, g] 
- *) 
+
+(* Uncomment the following when they constructors are defined: *)
+
+(*
+val s = Sq(7.0)
+val figs = [c, r, t, s] 
+
+val p = FigPair(r, s)
+val figs = [c, r, t, s, p] 
+
+val g = FigGroup([c, t, p])
+val figs = [c, r, t, s, p, g] 
+*)
 
 (* 	       
   (* Lyn has manually reformatted this: *)
