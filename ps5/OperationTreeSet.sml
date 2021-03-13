@@ -109,7 +109,7 @@ structure OperationTreeSet :> SET = struct
 
     (* Local private helper function for use in toList.
        Returns true if and only if list ys contains element x *)
-    fun listContains ys x = Unimplemented (* Flesh this out *)
+    fun listContains ys x = raise Unimplemented (* Flesh this out *)
 
     fun member _ _ = raise Unimplemented  
     fun toList _ = raise Unimplemented
