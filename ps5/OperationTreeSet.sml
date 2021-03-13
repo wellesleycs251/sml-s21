@@ -107,6 +107,10 @@ structure OperationTreeSet :> SET = struct
     fun intersection s1 s2 = Intersection(s1,s2)
     fun difference s1 s2 = Difference(s1,s2)
 
+    (* Local private helper function for use in toList.
+       Returns true if and only if list ys contains element x *)
+    fun listContains ys x = Unimplemented (* Flesh this out *)
+
     fun member _ _ = raise Unimplemented  
     fun toList _ = raise Unimplemented
     fun isEmpty _ = raise Unimplemented
