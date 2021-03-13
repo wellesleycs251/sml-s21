@@ -1,6 +1,6 @@
 (* Put your name(s) here:    *)
 
-(* CS251 Fall '20 Problem Set 5 Problem 3 FunSet. 
+(* CS251 Spring '21 Problem Set 5 Problem 3 FunSet. 
 
    Complete the predicate-based representation of the SET signature.
    Represent a set as a membership predicate function.

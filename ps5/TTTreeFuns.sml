@@ -1,6 +1,6 @@
 (* Put your name here:    *)
 
-(* CS 251 Fall '20 Problem Set 5 Problem 2 TTTreeFuns *)
+(* CS 251 Spring '21 Problem Set 5 Problem 2 TTTreeFuns *)
 
 use "TTTree.sml"; (* Given 2-3-tree datatypes and sample trees *)
 

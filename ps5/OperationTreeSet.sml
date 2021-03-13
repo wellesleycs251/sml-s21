@@ -1,6 +1,6 @@
 (* Put your name(s) here:    *)
 
-(* CS 251 Fall '20 Problem Set 5 Problem 4 OperationTreeSet. 
+(* CS 251 Spring '21 Problem Set 5 Problem 4 OperationTreeSet. 
 
    Complete the operation-tree representation of the SET signature.
    Represent a set as a tree of set operations. 
