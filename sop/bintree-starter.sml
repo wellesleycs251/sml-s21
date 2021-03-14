@@ -1,3 +1,7 @@
+(* Set printLength & printDepth appropriately *)		     
+Control.Print.printLength := 100;
+Control.Print.printDepth := 100;
+
 datatype 'a bintree =
     Leaf
   | Node of 'a bintree * 'a * 'a bintree (* left subtree, value, right subtree *)
@@ -38,7 +42,7 @@ fun numNodes Leaf = 0
 fun height Leaf = ()
   | height (Node(l,v,r)) = ()
 
-(* val sum_nodes = fn : int bintree -> int 
+(* val sumNodes = fn : int bintree -> int 
   Returns the sum of node values in binary tree of ints 
 
   - sumNodes intTree;
@@ -59,7 +63,7 @@ fun sumNodes Leaf = ()
 fun inlist Leaf = ()
   | inlist (Node(l,v,r)) = ()
 
-(* val map_tree = fn : ('a -> 'b) -> 'a bintree -> 'b bintree 
+(* val mapTree = fn : ('a -> 'b) -> 'a bintree -> 'b bintree 
    maps function over every node in a binary tree
 
    - mapTree (fn x => x*2) intTree;
@@ -75,7 +79,7 @@ fun inlist Leaf = ()
 fun mapTree f Leaf = ()
   | mapTree f (Node(l,v,r)) = ()
 
-(* val fold_tree = fn : ('b * 'a * 'b -> 'b) -> 'b -> 'a bintree -> 'b 
+(* val foldTree = fn : ('b * 'a * 'b -> 'b) -> 'b -> 'a bintree -> 'b 
    binary tree accumulation
 
    - foldTree (fn (lsum,v,rsum) => lsum + v + rsum) 0 intTree;
