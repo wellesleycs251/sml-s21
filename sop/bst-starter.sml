@@ -3,16 +3,20 @@
 
 use "bintree-soln.sml"; 
 
+(* Set printLength & printDepth appropriately *)		     
+Control.Print.printLength := 100;
+Control.Print.printDepth := 100;
+
 fun singleton v = Node(Leaf, v, Leaf)
 
 fun insert x Leaf = singleton x (* replace this stub *)
   | insert x (t as (Node(l,v,r))) =
     if x = v then
-	t
+      t (* set semantics; allow at most one copy of v in tree *) 
     else if x < v then
-	Node(insert x v, v, r)
+      Leaf (* replace this stub *)
     else
-	Node(l, v, insert v r)
+      Leaf (* replace this stub *)
 
 fun listToBst xs = (* Hint: use foldl *)
     Leaf (* replace this stub *)

@@ -3,6 +3,10 @@
 
 use "bintree-soln.sml";
 
+(* Set printLength & printDepth appropriately *)		     
+Control.Print.printLength := 100;
+Control.Print.printDepth := 100;
+
 fun singleton v = Node(Leaf, v, Leaf)
 
 fun insert x Leaf = singleton x
