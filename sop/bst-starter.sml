@@ -9,13 +9,14 @@ Control.Print.printDepth := 100;
 
 fun singleton v = Node(Leaf, v, Leaf)
 
-fun insert x Leaf = singleton x (* replace this stub *)
+fun insert x Leaf = Leaf (* replace this stub *)
   | insert x (t as (Node(l,v,r))) =
     if x = v then
-      t (* set semantics; allow at most one copy of v in tree *) 
-    else if x < v then
+      (* set semantics; allow at most one copy of v in tree *) 
       Leaf (* replace this stub *)
-    else
+    else if x < v then 
+      Leaf (* replace this stub *)
+    else (* x > v *) 
       Leaf (* replace this stub *)
 
 fun listToBst xs = (* Hint: use foldl *)

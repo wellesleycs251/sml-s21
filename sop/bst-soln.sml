@@ -11,9 +11,12 @@ fun singleton v = Node(Leaf, v, Leaf)
 
 fun insert x Leaf = singleton x
   | insert x (t as (Node(l,v,r))) =
-    if x = v then t
-    else if x < v then Node(insert x l, v, r)
-    else (* x > v *) Node(l, v, insert x r)
+    if x = v then 
+      t
+    else if 
+      x < v then Node(insert x l, v, r)
+    else (* x > v *) 
+      Node(l, v, insert x r)
 
 fun listToBst xs = foldl (fn (x,t) => insert x t) Leaf xs
 
