@@ -1,8 +1,7 @@
 (* CS 251 Set ADT exercises.
 
    Complete the list-based representation of the SET signature.
-   Represent a set as an unordered list of elements 
-   that *might* contain duplicates. 
+   Represent a set as an unordered list of elements potentially *with* duplicates. 
 
    You may ignore "Warning: calling polyEqual" in this exercise. *)
 
@@ -24,10 +23,10 @@ exception Unimplementable (* Impossible to implement *)
 signature SET =
 sig
     (* The type of sets *)
-    type ''a t
+    type ''a t 
 
     (* An empty set *)
-    val empty : ''a t 
+    val empty : ''a t
 
     (* Construct a single-element set from that element. *)
     val singleton : ''a -> ''a t
@@ -55,9 +54,8 @@ sig
     (* Construct the intersection of two sets. *)
     val intersection : ''a t -> ''a t -> ''a t
 
-    (* Construct the difference of two sets
-       (all elements in the first set but not in the second.) *)
-    val difference : ''a t -> ''a t -> ''a t					     
+    (* Construct the symmetric difference of two sets. *)
+    val difference : ''a t -> ''a t -> ''a t
 
     (* Construct a set from a list of elements.
        Do not assume the list elements are unique. *)
@@ -84,15 +82,13 @@ sig
     (* Convert a set to a string representation, given a function
        that converts a set element into a string representation. *)
     val toString : (''a -> string) -> ''a t -> string
-			      
-end
 
+end
 
 (* Implement a SET ADT using lists to represent sets. *)
 structure ListSetDups :> SET = struct
 
     (* Sets are represented by lists. *)
-    (* Invariant: We use unordered lists without duplicates *)
     type ''a t = ''a list
 
     (* The empty set is the empty list. *)
@@ -101,53 +97,91 @@ structure ListSetDups :> SET = struct
     (* complete this structure by replacing "raise Unimplemented"
        with implementations of each function *)
     fun singleton x = [x]
-			    
-    fun isEmpty [] = true
-      | isEmpty _  = false
-      
-    fun size xs = length (removeDups xs)
-		       
-    fun member x ys = List.exists (fn y => y=x) ys
-			 
-    fun insert x ys = x :: ys
-      
-    fun delete x ys = List.filter (fn y => y <> x) ys
-    fun union xs ys = xs @ ys
-    (* fun union xs ys = foldr insert ys xs *)
-    (* (fun union xs ys = (List.filter (fn x => not (member x ys)) xs) @ ys *)
-      
-    fun intersection _ = raise Unimplemented
-    fun difference _ = raise Unimplemented
-			     
-    fun fromList xs = xs
-			   
-    fun toList xs = (removeDups xs)
-			 
-    fun fromPred _ = raise Unimplementable (* impossible to implement! *)
-    fun toPred _ = raise Unimplemented
-    fun toString _ = raise Unimplemented
 
+    fun isEmpty xs = null xs
+			  
+    fun member x ys = List.exists (fn y => x = y) ys
+
+    (* Helper function to remove duplicates from a list of elements 
+       This implementation is *different* than the divide/conquer/glue
+       approach you're asked to implement on Solo Assignments B and C.
+       In particular, it keeps the *last* occurrence of each element 
+       rather than the *first*. *)
+    fun removeDups [] = [] 
+      | removeDups (x::ys) = 
+	if (List.exists (fn y => x = y) ys) then 
+	  removeDups ys
+	else
+	  x::(removeDups ys)
+
+    fun insert x ys = x :: ys (* Simple, because duplicates are allowed *)
+
+    fun delete x ys = List.filter (fn y => x <> y) ys
+
+    fun union xs ys = xs @ ys (* Simple, because duplicates are allowed *)
+				  
+    fun intersection xs ys = List.filter (fn x => member x ys) xs
+				   
+    fun difference xs ys = List.filter (fn x => not (member x ys)) xs				  
+
+    fun fromList xs = xs (* Simple, because duplicates are allowed *)
+
+    fun size xs = length (removeDups xs) (* must remove dups first! *)
+
+    fun toList xs = (removeDups xs) (* must remove dups first! *)
+
+    fun fromPred _ = raise Unimplementable (* impossible to implement! *)
+			   
+    fun toPred xs = fn x => member x xs
+			 
+    fun toString eltToString xs = (* note that toList removes dups *)
+	"{" ^ (String.concatWith "," (map eltToString (toList xs))) ^ "}"
+			     
 end
-                               
-(* Tests Cases -- add more of your own *)
-(*
-val test = ListSet.union
-               (ListSet.fromList [1,2,3])
-               (ListSet.fromList [3,4,5])
-val str  = ListSet.toString Int.toString test
-val mem0 = ListSet.member 0 test
-val mem1 = ListSet.member 1 test
-val mem2 = ListSet.member 2 test
-val mem3 = ListSet.member 3 test
-val mem4 = ListSet.member 4 test
-val mem5 = ListSet.member 5 test
-val mem6 = ListSet.member 6 test
-val ints = ListSet.toString Int.toString
-               (ListSet.intersection
-                   (ListSet.fromList [1,2,3])
-                   (ListSet.fromList [3,4,5]))
-val diff = ListSet.toString Int.toString
-               (ListSet.difference
-                    (ListSet.fromList [1,2,3])
-                    (ListSet.fromList [3,4,5]))
-*)
+
+(* Some tests cases. Can add more of your own *)
+
+open ListSetDups;
+
+val s1 = insert 1 (insert 2 (insert 3 empty)) (* {1,2,3} *)
+
+val s2 = insert 2 (insert 4 (insert 1 s1)) (* {1,2,3,4} *)
+
+val s3 = fromList [3,4,5,6,7]; (* {3,4,5,6,7} *)
+
+val delSet = delete 8 (delete 6 (delete 4 s3))
+
+val unionSet = union s2 s3
+
+val isectSet = intersection s2 s3
+
+val diffSet = difference s3 s2
+
+val namedSets = [("empty", empty), ("s1", s1), ("s2", s2), ("s3", s3),
+		 ("delSet", delSet), ("unionSet", unionSet), 
+		 ("isectSect", isectSet), ("diffSet", diffSet)]
+
+fun testSetFunction setFun = map (fn (name,set) => (name, setFun set)) 
+				 namedSets
+
+val toListTests = testSetFunction toList
+
+val sizeTests = testSetFunction size
+
+val isEmptyTests = testSetFunction isEmpty
+
+val toStringTests = testSetFunction (toString Int.toString)
+
+fun testMember set = map (fn i => (i, member i set))
+			 [0,1,2,3,4,5,6,7,8]
+
+val memberTests = testSetFunction testMember
+
+fun testToPred set = let val pred = toPred set 
+		     in map (fn i => (i, pred i))
+			    [0,1,2,3,4,5,6,7,8]
+		     end
+
+val toPredTests = testSetFunction testToPred
+
+
