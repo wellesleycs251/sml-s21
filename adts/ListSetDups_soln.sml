@@ -104,15 +104,19 @@ structure ListSetDups :> SET = struct
 
     (* Helper function to remove duplicates from a list of elements 
        This implementation is *different* than the divide/conquer/glue
-       approach you're asked to implement on Solo Assignments B and C.
-       In particular, it keeps the *last* occurrence of each element 
-       rather than the *first*. *)
+       approach you're asked to implement on Solo Assignments B and C
+       because it does *not* call removeDups directly on the rest of the list.
+
+       This illustrates that that there are often recursive solutions that 
+       make the problem smaller in ways different that just taking the rest 
+       of the input list. The DCG list recursion strategy presented in 
+       class is valuable because (1) its constrained form limits the solution
+       space you will explore and (2) it exactly matches the strategy 
+       expected by the higher-order foldr function. *)
     fun removeDups [] = [] 
-      | removeDups (x::ys) = 
-	if (List.exists (fn y => x = y) ys) then 
-	  removeDups ys
-	else
-	  x::(removeDups ys)
+      | removeDups (x::ys) =
+	x::(removeDups (List.filter (fn y => x <> y )
+				    ys))
 
     fun insert x ys = x :: ys (* Simple, because duplicates are allowed *)
 
