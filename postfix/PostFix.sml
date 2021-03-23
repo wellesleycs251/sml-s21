@@ -54,6 +54,12 @@ structure PostFix = struct
     | execCmd (Seq cmds) vs = (SeqVal cmds) :: vs
     | execCmd Pop (_ :: vs) = vs
     | execCmd Swap (v1 :: v2 :: vs) = v2 :: v1 :: vs
+    | execCmd (Arithop a) ((IntVal i1) :: (IntVal i2) :: vs)
+      = (IntVal ((arithopToFun a)(i2, i1)) ) :: vs
+    | execCmd (Relop r) ((IntVal i1) :: (IntVal i2) :: vs)
+      = (IntVal (boolToInt( ((relopToFun r)(i2, i1)) ) ) ) :: vs
+    | execCmd Sel (v_else :: v_then :: (IntVal i_test) :: vs) =
+      (if i_test = 0 then v_else else v_then) :: vs
     | execCmd Nget (stk as (IntVal index) :: vs) =
       if index <= 0 orelse index > List.length(vs) then
 	  raise ConfigError("Invalid index", Nget, stk)
@@ -62,20 +68,22 @@ structure PostFix = struct
  	       (v as IntVal(_)) => v :: vs
 	        | SeqVal(_) => raise ConfigError("Nget can't get a command sequence",
 						 Nget, stk))
-    | execCmd Sel (v_else :: v_then :: (IntVal i_test) :: vs) =
-      (if i_test = 0 then v_else else v_then) :: vs
     | execCmd Exec ((SeqVal cmds) :: vs) = execCmds cmds vs
-    | execCmd (Arithop a) ((IntVal i1) :: (IntVal i2) :: vs)
-      = (IntVal ((arithopToFun a)(i2, i1)) ) :: vs
-    | execCmd (Relop r) ((IntVal i1) :: (IntVal i2) :: vs)
-      = (IntVal (boolToInt( ((relopToFun r)(i2, i1)) ) ) ) :: vs
     | execCmd cmd stk = raise ConfigError("Illegal configuration", cmd, stk)
 
   and arithopToFun Add = op+
     | arithopToFun Mul = op*
     | arithopToFun Sub = op-
-    | arithopToFun Div = (fn(x,y) => x div y)
-    | arithopToFun Rem = (fn(x,y) => x mod y)
+    | arithopToFun Div = 
+      (fn(x,y) => if y = 0 then 
+		    raise ExecError ("Tried to divide " ^ (Int.toString x) ^ " by 0")
+		  else
+		    x div y)
+    | arithopToFun Rem = 
+      (fn(x,y) => if y = 0 then 
+		    raise ExecError ("Tried to remainder " ^ (Int.toString x) ^ " by 0")
+		  else
+		    x mod y)
 
   and relopToFun Lt = op<
     | relopToFun Eq = op=
@@ -222,8 +230,8 @@ val pfNgetNegativeIndex = testRun (PostFix(3, [Int ~1, Nget])) [7, 9, 5]
 val pfNgetZeroIndex = testRun (PostFix(3, [Int 0, Nget])) [7, 9, 5]
 val pfNgetTooBigIndex = testRun (PostFix(3, [Int 4, Nget])) [7, 9, 5]
 val pfNgetSeqVal = testRun (PostFix(3, [Seq[Swap,Pop], Int 1, Nget])) [7, 9, 5]
-
-
+val pfDivByZero = testRun (PostFix(2, [Arithop Div])) [0,3]
+val pfRemByZero = testRun (PostFix(2, [Arithop Rem])) [0,4]
 
 val pf1String = "(postfix 2 2 nget 0 gt (sub) (swap 1 nget mul add) sel exec)"
 

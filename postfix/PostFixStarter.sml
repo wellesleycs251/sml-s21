@@ -41,23 +41,32 @@ structure PostFix = struct
   fun run (PostFix(numargs, cmds)) args =
     if numargs = List.length args
     then case execCmds cmds (List.map IntVal args) of
-	     (IntVal v) :: _ => v
-	   | _  => raise ExecError "Command sequence on top of final stack"
+	     [] => raise ExecError "Empty final stack"
+	   | (IntVal v) :: _ => v
+	   | (SeqVal v) :: _ => raise ExecError "Command sequence on top of final stack"
     else raise ExecError "Mismatch between expected and actual number of args"
 
   (* Perform all commands on given stack and return resulting stack *)
   and execCmds cmds vs = List.foldl (fn (cmd,stk) => execCmd cmd stk) vs cmds
 						
   (* Perform command on given stack and return resulting stack *)
-  and execCmd (Int i) vs = vs
-    | execCmd (Seq cmds) vs = vs
+  and execCmd (Int i) vs = vs (* replace this stub *)
+    | execCmd (Seq cmds) vs = vs (* replace this stub *)
     | execCmd  _ vs = vs
 
   and arithopToFun Add = op+
     | arithopToFun Mul = op*
     | arithopToFun Sub = op-
-    | arithopToFun Div = (fn(x,y) => x div y)
-    | arithopToFun Rem = (fn(x,y) => x mod y)
+    | arithopToFun Div = 
+      (fn(x,y) => if y = 0 then 
+		    raise ExecError ("Tried to divide " ^ (Int.toString x) ^ " by 0")
+		  else
+		    x div y)
+    | arithopToFun Rem = 
+      (fn(x,y) => if y = 0 then 
+		    raise ExecError ("Tried to remainder " ^ (Int.toString x) ^ " by 0")
+		  else
+		    x mod y)
 
   and relopToFun Lt = op<
     | relopToFun Eq = op=
