@@ -12,7 +12,9 @@ signature SEQUENCE = sig
     (* An empty sequence *)
     val empty : ''a t
 
-    (* Create a sequence of (hi - lo) values fcn(lo), fcn(lo+1), ..., fcn(hi-1) *)
+    (* Given integers lo and hi and an (int -> ''a) function fcn,
+       if hi >= lo, returns a sequence of (hi - lo) values fcn(lo), fcn(lo+1), ..., fcn(hi-1);
+       if hi < lo, returns an empty sequence. *)
     val segment: int -> int -> (int -> ''a) -> ''a t
 
     (* Convert a length-n list into a sequence of n values *)				
