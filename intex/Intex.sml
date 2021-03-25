@@ -11,21 +11,21 @@ struct
 datatype pgm = Intex of int * exp
      and exp = Int of int
              | Arg of int
-	     | BinApp of binop * exp * exp
-     and binop = Add | Sub | Mul | Div | Rem
+	     | ArithApp of arithop * exp * exp
+     and arithop = Add | Sub | Mul | Div | Rem
 
-val sqr = Intex(1, BinApp(Mul, Arg 1, Arg 1))
-val avg = Intex(2, BinApp(Div, BinApp(Add, Arg 1, Arg 2), Int 2))
-val f2c = Intex(1, BinApp(Div,
-			  BinApp(Mul,
-				 BinApp(Sub, Arg 1, Int 32),
-				 Int 5),
-			  Int 9))
-val divRem = Intex(5, BinApp(Add,
-			     BinApp(Mul,
-				    BinApp(Div, Arg 1, Arg 2),
-				    Arg 3),
-			     BinApp(Rem, Arg 4, Arg 5)))
+val sqr = Intex(1, ArithApp(Mul, Arg 1, Arg 1))
+val avg = Intex(2, ArithApp(Div, ArithApp(Add, Arg 1, Arg 2), Int 2))
+val f2c = Intex(1, ArithApp(Div,
+			    ArithApp(Mul,
+				     ArithApp(Sub, Arg 1, Int 32),
+				     Int 5),
+			    Int 9))
+val divRem = Intex(5, ArithApp(Add,
+			       ArithApp(Mul,
+					ArithApp(Div, Arg 1, Arg 2),
+					Arg 3),
+			       ArithApp(Rem, Arg 4, Arg 5)))
 
 (*****************************************************************************
  Intex Interpreter
@@ -45,21 +45,34 @@ and eval (Int i) args = i
     if (index <= 0) orelse (index > List.length args)
     then raise EvalError "Arg index out of bounds"
     else List.nth(args, index-1)
-  | eval (BinApp(binop, exp1, exp2)) args =
+  | eval (ArithApp(arithop, exp1, exp2)) args =
     let val i1 = eval exp1 args
 	val i2 = eval exp2 args
-    in (case (binop, i2) of
+    in (case (arithop, i2) of
 	    (Div, 0) => raise EvalError "Division by 0"
 	  | (Rem,0) => raise EvalError "Remainder by 0"
-	  | _ => (binopToFun binop)(i1, i2))
+	  | _ => (arithopToFun arithop)(i1, i2))
     end
 
-(* val binopToFun: Intex.binop -> int * int -> int *)
-and binopToFun Add = op+
-  | binopToFun Mul = op*
-  | binopToFun Sub = op-
-  | binopToFun Div = (fn(x,y) => x div y)
-  | binopToFun Rem = (fn(x,y) => x mod y)
+(*   val arithopToFun: Intex.arithop -> int * int -> int 
+
+   Recall -> is *right* associative, so this is equivalen to:
+
+     val arithopToFun: Intex.arithop -> (int * int -> int)
+ *)
+and arithopToFun Add = op+
+  | arithopToFun Mul = op*
+  | arithopToFun Sub = op-
+  | arithopToFun Div = 
+    (fn(x,y) => if y = 0 then 
+		  raise EvalError ("Tried to divide " ^ (Int.toString x) ^ " by 0")
+		else
+		  x div y)
+  | arithopToFun Rem = 
+    (fn(x,y) => if y = 0 then 
+		  raise EvalError ("Tried to remainder " ^ (Int.toString x) ^ " by 0")
+		else
+		  x mod y)
 
 (*****************************************************************************
  Parsing from S-Expressions
@@ -89,11 +102,11 @@ and sexpToExp (Sexp.Int i) = Int i
     else
 	raise (SyntaxError ("invalid Intex symbol" ^ s))
   | sexpToExp (Sexp.Seq[Sexp.Sym p, rand1, rand2]) =
-    BinApp(stringToPrimop p, sexpToExp rand1, sexpToExp rand2)
+    ArithApp(stringToPrimop p, sexpToExp rand1, sexpToExp rand2)
   | sexpToExp sexp =  raise (SyntaxError ("invalid Intex expression: "
 					  ^ (Sexp.sexpToString sexp)))
 
-(* val stringToPrimop : string -> Intex.binop *)
+(* val stringToPrimop : string -> Intex.arithop *)
 and stringToPrimop "+" = Add
   | stringToPrimop "-" = Sub
   | stringToPrimop "*" = Mul
@@ -121,11 +134,11 @@ fun pgmToSexp (Intex(n,body)) =
 (* val expToSexp : Intex.exp -> Sexp.sexp *)
 and expToSexp (Int i) = Sexp.Int i
   | expToSexp (Arg i) = Sexp.Seq[Sexp.Sym "$", Sexp.Int i]
-  | expToSexp (BinApp (rator, rand1, rand2)) =
+  | expToSexp (ArithApp (rator, rand1, rand2)) =
     Sexp.Seq[Sexp.Sym (primopToString rator),
 	     expToSexp rand1, expToSexp rand2]
 
-(* val primopToString : Intex.binop -> string *)
+(* val primopToString : Intex.arithop -> string *)
 and primopToString Add = "+"
     | primopToString Sub = "-"
     | primopToString Mul = "*"

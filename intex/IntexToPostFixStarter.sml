@@ -17,16 +17,16 @@ fun intexToPostFix (Intex.Intex(numargs, exp)) =
   PostFix.PostFix(numargs, expToCmds exp 17)
 
 (* expToCmds: exp -> int -> cmd list *)
-and expToCmds (Intex.Int i) depth = [PostFix.Int 17]
-  | expToCmds (Intex.Arg index) depth = [PostFix.Int 17]
-  | expToCmds (Intex.BinApp(binop,exp1,exp2)) depth = [PostFix.Int 17]
+and expToCmds (Intex.Int i) depth = [PostFix.Int 57]
+  | expToCmds (Intex.Arg index) depth = [PostFix.Int 79]
+  | expToCmds (Intex.ArithApp(arithop,exp1,exp2)) depth = [PostFix.Int 83]
 
-(* binopToArithop : binop -> arithop *)
-and binopToArithop Intex.Add = PostFix.Add
-  | binopToArithop Intex.Sub = PostFix.Sub
-  | binopToArithop Intex.Mul = PostFix.Mul
-  | binopToArithop Intex.Div = PostFix.Div
-  | binopToArithop Intex.Rem = PostFix.Rem
+(* arithopToArithop : arithop -> arithop *)
+and arithopToArithop Intex.Add = PostFix.Add
+  | arithopToArithop Intex.Sub = PostFix.Sub
+  | arithopToArithop Intex.Mul = PostFix.Mul
+  | arithopToArithop Intex.Div = PostFix.Div
+  | arithopToArithop Intex.Rem = PostFix.Rem
 
 fun translateString intexPgmString =
   PostFix.pgmToString (intexToPostFix (Intex.stringToPgm intexPgmString))
@@ -48,9 +48,9 @@ open Intex
 open IntexToPostFix
 
 val msg1 = "Defining Intex program intexP1"
-val intexP1 = Intex(0, BinApp(Mul,
-			      BinApp(Sub, Int 7, Int 4),
-			      BinApp(Div, Int 8, Int 2)))
+val intexP1 = Intex(0, ArithApp(Mul,
+				ArithApp(Sub, Int 7, Int 4),
+				ArithApp(Div, Int 8, Int 2)))
 
 val msg2 = "intexP1 as an sexp string:"
 val intexP1String = pgmToString(intexP1)
@@ -68,9 +68,9 @@ val msg6 = "Running pfIntexP1 in PostFix on arglist []"
 val pfIntexP1Test = PostFix.run pfIntexP1 []
 
 val msg7 = "Defining Intex program intexP2"
-val intexP2 = Intex(4, BinApp(Mul,
-			      BinApp(Sub, Arg 1, Arg 2),
-			      BinApp(Div, Arg 3, Arg 4)))
+val intexP2 = Intex(4, ArithApp(Mul,
+				ArithApp(Sub, Arg 1, Arg 2),
+				ArithApp(Div, Arg 3, Arg 4)))
 
 val msg8 =  "intexP2 as an sexp string:"
 val intexP2String = pgmToString(intexP2)
