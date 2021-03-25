@@ -1,0 +1,29 @@
+{Program that tests simple behavior of Condex's and} 
+
+(condex 2 (and $1 $2))
+
+{
+Testing:
+
+condex> (#run andTest.cdx 0 0)
+0
+
+condex> (#run andTest.cdx 0 1)
+0
+
+condex> (#run andTest.cdx 1 0)
+0
+
+condex> (#run andTest.cdx 1 1)
+1
+
+condex> (#run andTest.cdx 0 2)
+0
+
+condex> (#run andTest.cdx 3 0)
+0
+
+condex> (#run andTest.cdx 4 5)
+5
+
+}

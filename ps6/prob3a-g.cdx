@@ -1,0 +1,50 @@
+{ Translation into Condex of PS6 Problem 3a Racket g function:
+
+;; The Racket g function from PS6 Problem 3a:
+(define (g a b c)
+     (- c
+        (if (= 0 (remainder a 2))
+            (quotient b (- a c))
+            ( * (+ b c) a))))
+
+;; Below is the translation of this function in Condex:
+ 
+}
+
+(condex 3 (- $3 (ifnz (= 0 (% $1 2))
+	              (/ $2 (- $1 $3))
+		      (* (+ $2 $3) $1))))
+
+{
+Recall these tests from PS6 Problem 3 a
+
+  Testing pfg on (10 2 8):  same result for g and pfg = 7
+  Testing pfg on (11 2 8):  same result for g and pfg = -102
+  # Replace this test
+  #  Testing pfg on (-6 3 8):  same result for g and pfg = 8
+  # by the following (why? because div and quotient have
+  # subtly different semantics in SML!)
+  Testing pfg on (12 3 8):  same result for g and pfg = 8
+  Testing pfg on (-7 2 3):  same result for g and pfg = 38
+  Testing pfg on (5 4 5):  same result for g and pfg = -40
+
+We'll do similar tests for Condex:
+
+condex> (#run prob3g.cdx 10 2 8)
+7
+
+
+condex> (#run prob3g.cdx 11 2 8)
+~102
+
+
+condex> (#run prob3g.cdx 12 3 8)
+8
+
+condex> (#run prob3g.cdx -7 2 3)
+38
+
+condex> (#run prob3g.cdx 5 4 5)
+~40
+
+}

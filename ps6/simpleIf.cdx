@@ -1,0 +1,14 @@
+(condex 2 (ifnz (< $1 $2) (+ $1 $2) (* $1 $2)))
+
+{ Some test cases:
+
+condex> (#run simpleIf.cdx 3 4)
+7
+
+condex> (#run simpleIf.cdx 3 3)
+9
+
+condex> (#run simpleIf.cdx 4 3)
+12
+
+}

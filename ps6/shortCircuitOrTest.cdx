@@ -1,0 +1,22 @@
+{Program that tests short-ciruit behavior of Condex's or} 
+
+(condex 2 (or $1 (% 42 $2)))
+
+{
+Testing:
+
+condex> (#run shortCircuitOrTest.cdx 0 9)
+6
+
+condex> (#run shortCircuitOrTest.cdx 4 5)
+4
+
+; Tests or is short circuit
+condex> (#run shortCircuitOrTest.cdx 7 0)
+7
+
+; Triggers remainder-by-0 in or
+condex> (#run shortCircuitOrTest.cdx 0 0)
+Error: Tried to remainder 42 by 0
+
+}

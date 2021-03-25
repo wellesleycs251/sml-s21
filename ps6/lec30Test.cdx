@@ -1,0 +1,29 @@
+{Translation into Condex of Lec 30 Racket to PostFix exercise:
+
+  (define (test a b c)
+    (if (> a b) (/ b c) (remainder b a)))
+}
+
+(condex 3 (ifnz (> $1 $2) (/ $2 $3) (% $2 $1)))
+
+{
+Testing:
+
+condex> (#run lec30Test.cdx 5 8 0)
+3
+
+condex> (#run lec30Test.cdx 6 17 0)
+5
+
+condex> (#run lec30Test.cdx 0 -8 2)
+~4
+
+condex> (#run lec30Test.cdx 0 -18 3)
+~6
+
+condex> (#run lec30Test.cdx 2 1 0)
+Error: Division by 0
+
+condex> (#run lec30Test.cdx 0 1 2)
+Error: Remainder by 0
+}

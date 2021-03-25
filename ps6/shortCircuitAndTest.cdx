@@ -1,0 +1,22 @@
+{Program that tests short-ciruit behavior of Condex's and} 
+
+(condex 2 (and $1 (/ 17 $2)))
+
+{
+Testing:
+
+condex> (#run shortCircuitAndTest.cdx 0 2)
+0
+
+; Tests and is short circuit
+condex> (#run shortCircuitAndTest.cdx 0 0)
+0
+
+condex> (#run shortCircuitAndTest.cdx 4 5)
+3
+
+; Triggers divide-by-0 in and
+condex> (#run shortCircuitAndTest.cdx 6 0)
+Error: Tried to divide 17 by 0
+
+}

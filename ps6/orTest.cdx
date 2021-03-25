@@ -1,0 +1,29 @@
+{Program that tests simple behavior of Condex's or} 
+
+(condex 2 (or $1 $2))
+
+{
+Testing:
+
+condex> (#run orTest.cdx 0 0)
+0
+
+condex> (#run orTest.cdx 0 1)
+1
+
+condex> (#run orTest.cdx 1 0)
+1
+
+condex> (#run orTest.cdx 1 1)
+1
+
+condex> (#run orTest.cdx 0 2)
+2
+
+condex> (#run orTest.cdx 3 0)
+3
+
+condex> (#run orTest.cdx 4 5)
+4
+
+}

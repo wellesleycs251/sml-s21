@@ -1,0 +1,2 @@
+{Return the absolute value the inputs}
+(condex 1 (ifnz (< $1 0) (- 0 $1) $1))

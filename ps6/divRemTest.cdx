@@ -1,0 +1,26 @@
+{Program that tests handling of division & remainder errors in conditional branches.}
+
+(condex 3 (ifnz (> $1 $2) (/ $2 $3) (% $2 $1)))
+
+{
+Testing:
+
+condex> (#run lec30Test.cdx 5 8 0)
+3
+
+condex> (#run lec30Test.cdx 6 17 0)
+5
+
+condex> (#run lec30Test.cdx 0 -8 2)
+~4
+
+condex> (#run lec30Test.cdx 0 -18 3)
+~6
+
+condex> (#run lec30Test.cdx 3 2 0)
+Error: Tried to divide 2 by 0
+
+condex> (#run lec30Test.cdx 0 4 5)
+Error: Tried to remainder 4 by 0
+
+}

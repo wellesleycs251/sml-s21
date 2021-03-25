@@ -1,0 +1,26 @@
+(condex 3 (ifnz (ifnz (< $1 $2) (< $1 $3) (> $1 $3))
+		(ifnz (= $2 $3) (* $2 $2) (% $2 $3))
+                (ifnz (> $2 $3) (/ $2 $3) (- $3 $2))))
+
+{
+Some test cases:
+
+condex> (#run nestedIfs.cdx 6 7 7) 
+49
+
+condex> (#run nestedIfs.cdx 4 17 6)
+5
+
+condex> (#run nestedIfs.cdx 6 5 5)
+25
+
+condex> (#run nestedIfs.cdx 20 17 5)
+2
+
+condex> (#run nestedIfs.cdx 8 17 5)
+3
+
+condex> (#run nestedIfs.cdx 7 6 16)
+10
+
+}

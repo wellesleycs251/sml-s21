@@ -1,0 +1,31 @@
+(condex 4 (+ (< $1 $2) (+ (= $1 $3) (> $1 $4))))
+
+{
+Some test cases:
+
+condex> (#run sumRelations.cdx 5 6 5 4)
+3
+
+condex> (#run sumRelations.cdx 5 3 5 4)
+2
+
+condex> (#run sumRelations.cdx 5 6 3 4)
+2
+
+condex> (#run sumRelations.cdx 5 6 5 7)
+2
+
+
+condex> (#run sumRelations.cdx 5 6 7 7)
+1
+
+condex> (#run sumRelations.cdx 5 3 5 7)
+1
+
+condex> (#run sumRelations.cdx 5 3 7 4)
+1
+
+condex> (#run sumRelations.cdx 5 3 4 7)
+0
+
+}

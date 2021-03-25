@@ -1,0 +1,16 @@
+{Program in which ifnz test can be any integer, not just 0 or 1}
+(condex 2 (ifnz (+ $1 $2) (* $1 $2) (- $1 $2)))
+
+{
+condex> (#run nonbooleanIfnzTest.cdx 0 1)
+0
+
+condex> (#run nonbooleanIfnzTest.cdx -1 1)
+~2
+
+condex> (#run nonbooleanIfnzTest.cdx 7 4)
+28
+
+condex> (#run nonbooleanIfnzTest.cdx -3 -5)
+15
+}
