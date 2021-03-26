@@ -23,11 +23,11 @@ and expToCmds (Condex.Int i) depth = [PostFix.Int i]
   | expToCmds (Condex.Arg index) depth =
     [PostFix.Int (index + depth), PostFix.Nget]
     (* specified argument is on stack at index + depth *)
-  | expToCmds (Condex.ArithApp(arithop,exp1,exp2)) depth = 
+  | expToCmds (Condex.ArithApp(aop,exp1,exp2)) depth = 
     (expToCmds exp1 depth) (* 1st operand is at same depth as whole binapp *)
     @ (expToCmds exp2 (depth + 1)) (* for 2nd operand, add 1 to depth to account for 1st operand *)
-    @ [arithopToCmd arithop]
-  | expToCmds (Condex.RelApp(relop,exp1,exp2)) depth =
+    @ [arithopToCmd aop]
+  | expToCmds (Condex.RelApp(rop,exp1,exp2)) depth =
     [PostFix.Int 11] (* replace this stub *)
   | expToCmds (Condex.And(exp1,exp2)) depth =
     [PostFix.Int 29] (* replace this stub *)
@@ -36,13 +36,14 @@ and expToCmds (Condex.Int i) depth = [PostFix.Int i]
   | expToCmds (Condex.Ifnz(testExp,thenExp,elseExp)) depth =
     [PostFix.Int 87] (* replace this stub *)
 
-(* put type here! *)    
+(* Condex.arithop -> PostFix.cmd *)
 and arithopToCmd Condex.Add = PostFix.Arithop PostFix.Add
   | arithopToCmd Condex.Sub = PostFix.Arithop PostFix.Sub
   | arithopToCmd Condex.Mul = PostFix.Arithop PostFix.Mul
   | arithopToCmd Condex.Div = PostFix.Arithop PostFix.Div
   | arithopToCmd Condex.Rem = PostFix.Arithop PostFix.Rem
 
+(* Condex.relop -> PostFix.cmd *)
 and relopToCmd Condex.Lt = PostFix.Relop PostFix.Lt
   | relopToCmd Condex.Eq = PostFix.Relop PostFix.Eq
   | relopToCmd Condex.Gt = PostFix.Relop PostFix.Gt
