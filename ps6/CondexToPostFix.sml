@@ -23,11 +23,11 @@ and expToCmds (Condex.Int i) depth = [PostFix.Int i]
   | expToCmds (Condex.Arg index) depth =
     [PostFix.Int (index + depth), PostFix.Nget]
     (* specified argument is on stack at index + depth *)
-  | expToCmds (Condex.ArithApp(aop,exp1,exp2)) depth = 
+  | expToCmds (Condex.ArithApp(arithop,exp1,exp2)) depth = 
     (expToCmds exp1 depth) (* 1st operand is at same depth as whole binapp *)
     @ (expToCmds exp2 (depth + 1)) (* for 2nd operand, add 1 to depth to account for 1st operand *)
-    @ [arithopToCmd aop]
-  | expToCmds (Condex.RelApp(rop,exp1,exp2)) depth =
+    @ [arithopToCmd arithop]
+  | expToCmds (Condex.RelApp(relop,exp1,exp2)) depth =
     [PostFix.Int 11] (* replace this stub *)
   | expToCmds (Condex.And(exp1,exp2)) depth =
     [PostFix.Int 29] (* replace this stub *)
