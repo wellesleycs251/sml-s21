@@ -16,7 +16,7 @@ datatype pgm = Intex of int * exp
 
 val sqr = Intex(1, ArithApp(Mul, Arg 1, Arg 1))
 val avg = Intex(2, ArithApp(Div, ArithApp(Add, Arg 1, Arg 2), Int 2))
-(* val f2c = Flesh this Farenheit to Celsius converter! *)
+(* val f2c = Flesh out this Farenheit to Celsius converter! *)
 val divRem = Intex(5, ArithApp(Add,
 			       ArithApp(Mul,
 					ArithApp(Div, Arg 1, Arg 2),
@@ -130,6 +130,11 @@ end
 
 (* open Intex structure when loading so all functions available unqualified *)
 open Intex
+
+(* increase default printDepth, printLength, stringDepth *)
+val _ = Control.Print.printDepth := 10000;
+val _ = Control.Print.printLength := 10000;
+val _ = Control.Print.stringDepth := 10000;
 
 val sqrTest = run sqr [5]
 val avgTest = run avg [5,15]

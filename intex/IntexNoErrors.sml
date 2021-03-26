@@ -136,6 +136,11 @@ end
 (* open Intex structure when loading so all functions available unqualified *)
 open Intex
 
+(* increase default printDepth, printLength, stringDepth *)
+val _ = Control.Print.printDepth := 10000;
+val _ = Control.Print.printLength := 10000;
+val _ = Control.Print.stringDepth := 10000;
+
 val sqrTest = run sqr [5]
 val avgTest = run avg [5,15]
 val f2cTests = map (fn temp => (temp, run f2c temp)) 

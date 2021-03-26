@@ -47,6 +47,11 @@ end
 open Intex
 open IntexToPostFix
 
+(* increase default printDepth, printLength, stringDepth *)
+val _ = Control.Print.printDepth := 10000;
+val _ = Control.Print.printLength := 10000;
+val _ = Control.Print.stringDepth := 10000;
+
 val msg1 = "Defining Intex program intexP1"
 val intexP1 = Intex(0, ArithApp(Mul,
 				ArithApp(Sub, Int 7, Int 4),

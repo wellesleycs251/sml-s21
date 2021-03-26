@@ -46,13 +46,7 @@ and eval (Int i) args = i
     then raise EvalError "Arg index out of bounds"
     else List.nth(args, index-1)
   | eval (ArithApp(arithop, exp1, exp2)) args =
-    let val i1 = eval exp1 args
-	val i2 = eval exp2 args
-    in (case (arithop, i2) of
-	    (Div, 0) => raise EvalError "Division by 0"
-	  | (Rem,0) => raise EvalError "Remainder by 0"
-	  | _ => (arithopToFun arithop)(i1, i2))
-    end
+    (arithopToFun arithop)(eval exp1 args, eval exp2 args)
 
 (*   val arithopToFun: Intex.arithop -> int * int -> int 
 
@@ -158,6 +152,11 @@ end
  *****************************************************************************)
 
 open Intex
+
+(* increase default printDepth, printLength, stringDepth *)
+val _ = Control.Print.printDepth := 10000;
+val _ = Control.Print.printLength := 10000;
+val _ = Control.Print.stringDepth := 10000;
 
 val sqrTest = run sqr [5]
 val avgTest = run avg [5,15]
