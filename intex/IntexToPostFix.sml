@@ -25,14 +25,14 @@ and expToCmds (Intex.Int i) depth = [PostFix.Int i]
   | expToCmds (Intex.ArithApp(aop,exp1,exp2)) depth =
     (expToCmds exp1 depth) (* 1st operand is at same depth as whole binapp *)
     @ (expToCmds exp2 (depth + 1)) (* for 2nd operand, add 1 to depth to account for 1st operand *)
-    @ [PostFix.Arithop (arithopToArithop aop)]
+    @ [arithopToCmd aop]
 
-(* arithopToArithop : arithop -> arithop *)	  
-and arithopToArithop Intex.Add = PostFix.Add
-  | arithopToArithop Intex.Sub = PostFix.Sub
-  | arithopToArithop Intex.Mul = PostFix.Mul
-  | arithopToArithop Intex.Div = PostFix.Div
-  | arithopToArithop Intex.Rem = PostFix.Rem
+(* arithopToCmd: Intex.arithop -> PostFix.cmd *)
+and arithopToCmd Intex.Add = PostFix.Arithop PostFix.Add
+  | arithopToCmd Intex.Sub = PostFix.Arithop PostFix.Sub
+  | arithopToCmd Intex.Mul = PostFix.Arithop PostFix.Mul
+  | arithopToCmd Intex.Div = PostFix.Arithop PostFix.Div
+  | arithopToCmd Intex.Rem = PostFix.Arithop PostFix.Rem
 
 fun translateString intexPgmString =
   PostFix.pgmToString (intexToPostFix (Intex.stringToPgm intexPgmString))
