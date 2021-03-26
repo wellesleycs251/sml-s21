@@ -19,7 +19,7 @@ fun intexToPostFix (Intex.Intex(numargs, exp)) =
 (* expToCmds: exp -> int -> cmd list *)
 and expToCmds (Intex.Int i) depth = [PostFix.Int 57]
   | expToCmds (Intex.Arg index) depth = [PostFix.Int 79]
-  | expToCmds (Intex.ArithApp(aop,exp1,exp2)) depth = [PostFix.Int 83]
+  | expToCmds (Intex.ArithApp(arithop,exp1,exp2)) depth = [PostFix.Int 83]
 
 (* arithopToCmd: Intex.arithop -> PostFix.cmd *)
 and arithopToCmd Intex.Add = PostFix.Arithop PostFix.Add

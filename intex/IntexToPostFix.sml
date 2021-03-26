@@ -22,10 +22,10 @@ fun intexToPostFix (Intex.Intex(numargs, exp)) =
 and expToCmds (Intex.Int i) depth = [PostFix.Int i]
   | expToCmds (Intex.Arg index) depth = [PostFix.Int (index + depth), PostFix.Nget]
    (* specified argument is on stack at index + depth *)
-  | expToCmds (Intex.ArithApp(aop,exp1,exp2)) depth =
+  | expToCmds (Intex.ArithApp(arithop,exp1,exp2)) depth =
     (expToCmds exp1 depth) (* 1st operand is at same depth as whole binapp *)
     @ (expToCmds exp2 (depth + 1)) (* for 2nd operand, add 1 to depth to account for 1st operand *)
-    @ [arithopToCmd aop]
+    @ [arithopToCmd arithop]
 
 (* arithopToCmd: Intex.arithop -> PostFix.cmd *)
 and arithopToCmd Intex.Add = PostFix.Arithop PostFix.Add
